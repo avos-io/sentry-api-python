@@ -3,7 +3,7 @@ from typing import Type
 
 from sentry_api.exceptions import SentryApiNoTokenProvidedException
 from sentry_api.http import BaseHttp, RequestsHttp
-from sentry_api.resources import ProjectRulesResource, ProjectsResource, TeamsResource
+from sentry_api.resources import ProjectRulesResource, ProjectsResource, TeamsResource, IssueResource
 
 
 class SentryApi:
@@ -34,3 +34,7 @@ class SentryApi:
     @property
     def teams(self) -> TeamsResource:
         return TeamsResource(self.organization_slug, self.http_client)
+
+    @property
+    def issue(self) -> IssueResource:
+        return IssueResource(self.organization_slug, self.http_client)
