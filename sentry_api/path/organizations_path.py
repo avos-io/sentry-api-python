@@ -1,6 +1,6 @@
 # Organisations
 def __org_slug_path(organization_slug: str):
-    return{f"organizations/{organization_slug}/"}
+    return f"organizations/{organization_slug}/"
 
 # Organisations Issues
 def org_issues_path(organization_slug: str):
