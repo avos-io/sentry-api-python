@@ -34,10 +34,8 @@ class RequestsHttp(BaseHttp):
 
         def request(self, method, url, *args, **kwargs):
             joined_url = urljoin(self.base_url, url)
-            if "json" in kwargs and kwargs["json"]:
-                kwargs["json"] = self.remove_empty(kwargs["json"])
 
-            return super().request(method, joined_url, *args, **kwargs)
+            return self.request_full_url(method, joined_url, *args, **kwargs)
 
         def remove_empty(self, params: dict):
             """
