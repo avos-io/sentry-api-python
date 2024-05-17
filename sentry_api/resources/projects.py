@@ -4,6 +4,12 @@ from .base import BaseResource
 
 
 class ProjectsResource(BaseResource):
+    def list(self):
+        """
+        Sentry API: https://docs.sentry.io/api/projects/list-your-projects/
+        """
+        return self.http_client.make_a_call("get", "projects/")
+
     def get(self, project_slug: str):
         """
         Sentry API: https://docs.sentry.io/api/projects/retrieve-a-project/
