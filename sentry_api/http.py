@@ -26,6 +26,12 @@ class RequestsHttp(BaseHttp):
             super().__init__()
             self.base_url = base_url
 
+        def request_full_url(self, method, url, *args, **kwargs):
+            if "json" in kwargs and kwargs["json"]:
+                kwargs["json"] = self.remove_empty(kwargs["json"])
+
+            return super().request(method, url, *args, **kwargs)
+
         def request(self, method, url, *args, **kwargs):
             joined_url = urljoin(self.base_url, url)
             if "json" in kwargs and kwargs["json"]:
@@ -45,9 +51,7 @@ class RequestsHttp(BaseHttp):
         self.session = RequestsHttp.BaseUrlSession(endpoint_url)
         self.session.headers.update({"authorization": "Bearer " + token})
 
-    def make_a_call(self, http_method: str, endpoint: str, data: dict = None):
-        r = self.session.request(http_method, endpoint, json=data)
-
+    def __check_status_code(self, r):
         if r.status_code == 400:
             raise SentryApiBadInputException(r)
 
@@ -63,4 +67,12 @@ class RequestsHttp(BaseHttp):
         if r.status_code == 409:
             raise SentryApiConflictException(r)
 
+    def make_a_full_url_call(self, http_method: str, url: str, data: dict = None):
+        r = self.session.request_full_url(http_method, url, json=data)
+        self.__check_status_code(r)
+        return r
+
+    def make_a_call(self, http_method: str, endpoint: str, data: dict = None):
+        r = self.session.request(http_method, endpoint, json=data)
+        self.__check_status_code(r)
         return r
