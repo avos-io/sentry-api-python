@@ -29,6 +29,8 @@ class RequestsHttp(BaseHttp):
         def request_full_url(self, method, url, *args, **kwargs):
             if "json" in kwargs and kwargs["json"]:
                 kwargs["json"] = self.remove_empty(kwargs["json"])
+
+            print(f"Requesting {method} {url}")
             return super().request(method, url, *args, **kwargs)
 
         def request(self, method, url, *args, **kwargs):
